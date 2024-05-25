@@ -38,6 +38,7 @@ itqan.accounts.CustomSalesInvoiceController = class CustomSalesInvoiceController
 				frappe.msgprint(__("Please specify Company to proceed"));
 			}
 		}
+        this.frm.doc.custom_paid_amount = this.frm.doc.grand_total
 		this.custom_calculate_outstanding_amount();
 		this.frm.refresh_fields();
 	}

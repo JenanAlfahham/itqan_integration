@@ -89,6 +89,10 @@ class CustomSalesInvoice(SalesInvoice):
 
             frappe.throw(_("""Paid amount + Write Off Amount can not be greater than Grand Total"""))
         
+        # If the invoice is paid but the paid amount is zero then paid amount is equal grand total
+        if self.custom_is_paid and not self.custom_paid_amount:
+            self.custom_paid_amount = self.grand_total
+
         if self.custom_paid_amount:
             self.custom_base_paid_amount = flt(
                 self.custom_paid_amount * self.conversion_rate, self.precision("custom_base_paid_amount")
