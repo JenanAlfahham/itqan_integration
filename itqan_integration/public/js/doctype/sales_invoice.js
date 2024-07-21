@@ -104,6 +104,21 @@ itqan.accounts.CustomSalesInvoiceController = class CustomSalesInvoiceController
 		this.frm.set_currency_labels(["custom_paid_amount"], this.frm.doc.currency);
 
     }
+    mode_of_payment(){
+        let me = this;
+        if (me.frm.doc.mode_of_payment){
+            frappe.call({
+                "method": "itqan_integration.overrides.doctype.sales_invoice.get_payment_account",
+                "args": {
+                    "mode_of_payment": me.frm.doc.mode_of_payment,
+                    "company": me.frm.doc.company
+                },
+                callback: function(r){
+                    if (r.message) me.frm.set_value("custom_cash_bank_account", r.message);
+                }
+            })
+        }
+    }
 }
 
 // for backward compatibility: combine new and previous states

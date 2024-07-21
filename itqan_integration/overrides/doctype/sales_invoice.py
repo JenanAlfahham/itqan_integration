@@ -3,6 +3,7 @@ from frappe import _
 from frappe.utils import flt, cint
 
 import erpnext
+from erpnext import get_default_company
 from erpnext.accounts.utils import get_account_currency
 from erpnext.accounts.doctype.sales_invoice.sales_invoice import SalesInvoice, update_linked_doc
 from erpnext.setup.doctype.company.company import update_company_current_month_sales
@@ -209,3 +210,14 @@ class CustomSalesInvoice(SalesInvoice):
                     item=self,
                 )
             )
+
+
+@frappe.whitelist()
+def get_payment_account(mode_of_payment, company = None):
+    if not company:
+        company = get_default_company()
+
+    return frappe.db.get_value("Mode of Payment Account", {
+        "parent": mode_of_payment,
+        "company": company
+    }, "default_account")
